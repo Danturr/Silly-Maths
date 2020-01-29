@@ -14,7 +14,7 @@ trigger MathChildTrigger on LodestoneTest__Math_Child__c (after insert, after up
         }
     }
     
-    public class QuickMaths {
+    public without sharing class QuickMaths {
         public void updateMaths(LodestoneTest__Math_Child__c m) {
             Decimal calculation = 0;
             
@@ -28,7 +28,6 @@ trigger MathChildTrigger on LodestoneTest__Math_Child__c (after insert, after up
             }
             
             for (LodestoneTest__Math_Child__c mathChild : [SELECT Id, LodestoneTest__Operation__c, LodestoneTest__Number__c FROM LodestoneTest__Math_Child__c WHERE LodestoneTest__Math__c = :m.LodestoneTest__Math__c ORDER BY CreatedDate asc]) {
-                System.debug(calculation);
                 switch on mathChild.LodestoneTest__Operation__c {
                     when 'Addition' {
                         calculation += mathChild.LodestoneTest__Number__c;
@@ -43,10 +42,8 @@ trigger MathChildTrigger on LodestoneTest__Math_Child__c (after insert, after up
                         calculation *= mathChild.LodestoneTest__Number__c;
                     }
                 }
-                System.debug(calculation);
             }
             
-            System.debug(calculation);
             parent[0].LodestoneTest__Result__c = calculation;
             update parent;
         }	
